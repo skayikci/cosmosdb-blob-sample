@@ -1,0 +1,62 @@
+{
+	"info": {
+		"_postman_id": "78d32943-b75d-4161-b59b-48edc6dfd98a",
+		"name": "az-204-collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26032002"
+	},
+	"item": [
+		{
+			"name": "BLOB - create container",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/blob/container",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"blob",
+						"container"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BLOB - upload a file",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/serhatkayikci/Downloads/A-56KB-Bitmap-Left-compared-to-a-10KB-JPEG-Image-Right.ppm"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/blob/file",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"blob",
+						"file"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

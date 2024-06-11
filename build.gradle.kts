@@ -30,8 +30,10 @@ dependencies {
     implementation("com.azure:azure-storage-blob")
     implementation("com.azure:azure-identity")
     implementation("com.azure.spring:spring-cloud-azure-starter-data-cosmos")
+    implementation("org.mapstruct:mapstruct:1.5.5.Final")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
+    annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

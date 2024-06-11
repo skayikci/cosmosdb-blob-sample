@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "78d32943-b75d-4161-b59b-48edc6dfd98a",
-		"name": "az-204-collection",
+		"name": "cosmosdb-blob-collection",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "26032002"
 	},
@@ -22,6 +22,99 @@
 						"v1",
 						"blob",
 						"container"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "COSMOSDB create customer",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\": \"Jane\",\n    \"lastName\": \"Smith\",\n    \"emailAddress\": \"jane.smith@example.com\",\n    \"countryCode\": 44,\n    \"lineNumber\": 987654321,\n    \"address\": \"456 Oak Avenue\",\n    \"zipCode\": \"54321\",\n    \"state\": \"CA\",\n    \"country\": \"GB\",\n    \"language\": \"en\",\n    \"verified\": false\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/cosmosdb",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"cosmosdb"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "COSMOSDB get customer",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/cosmosdb/54f22ced-d292-42ab-9174-1b1cd288fa56",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"cosmosdb",
+						"54f22ced-d292-42ab-9174-1b1cd288fa56"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "COSMOSDB get all customers",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/cosmosdb/all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"cosmosdb",
+						"all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "COSMOSDB get all customers by country",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/cosmosdb/country/GB",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"cosmosdb",
+						"country",
+						"GB"
 					]
 				}
 			},

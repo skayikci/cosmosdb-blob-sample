@@ -1,3 +1,5 @@
+# READ ME FIRST
+- [Disclaimer](#disclaimer-text)
 # Azure Cosmosdb
 - Perform operations using SDK for cosmosdb (read/write)
 - Configure and work with RUs (request units)
@@ -5,7 +7,7 @@
   - Be familiar with how 
   - When to use which replication level
     - `Strong`: happens to all replicas immediately
-    - `Bounded` staleness: set maximum amount of time to lag from time the write accours until it is read
+    - `Bounded staleness` <b>DEFAULT</b>: set maximum amount of time to lag from time the write accours until it is read
     - `Session`: all reads/writes are the same for the same session (especially when they share the same session token), apps that doesn't have the same session will have `Eventual` consistency
     - `Consistent prefix`: Allows delays when replicating, but ensures writes happen in all replicas in same exact order (no out of order writes).
     - `Eventual`: will write the data in all replicas "eventually". doesn't guarantee the order.
@@ -84,7 +86,8 @@ flowchart LR
             "type": "Lifecycle",
             "definition: {...}
           }
-        }```
+        }
+        ```
         
 ### Static site hosting in a storage account
   - How to release a static website
@@ -134,6 +137,7 @@ flowchart LR
   * `spring.servlet.multipart.max-file-size`: the maximum file size in the backend
   * `spring.servlet.multipart.max-request-size` : accepted request size
 
+
 ### Reference Documentation
 
 For further reference, please consider the following sections:
@@ -160,3 +164,67 @@ These additional references should also help you:
 * [Gradle Build Scans – insights for your project's build](https://scans.gradle.com#gradle)
 * [Azure Cosmos DB Sample](https://aka.ms/spring/samples/latest/cosmos)
 
+## Update 09.06.2024
+## Partition key summary
+- Not required for data under 10GB
+- It is a placement handle to tell cosmosdb `How to` write and find the data
+- We can write queries without a partition key, with `fanout query`
+  - `fanout query`: You change your statements each time for filtering the results (for example, one for a customer's age, then customer's city), the database will first go through a more common node, but then each time the filter parameter change, it will start to look at each and every node!
+- Since `fanout queries` doesn't scale, we will have bottlenecks or hit the limit of maximum amount of queries per single node
+- We can scale : `READ`, `WRITE` and `STORAGE`.
+  - `STORAGE`: Use X number of nodes , and you will use `fanout queries` to retrieve the data. 
+    - (-) You will have `READ` bottlenecks (as we will ask each node where to find our data!)
+  - `READ`: To scale, replicate the data for each of these nodes.
+    - (-) You will have `WRITE` bottlenecks (as we will need to write to each and every node!).
+  - `WRITE`: The only way to scale writes is to `SHARD` or `PARTITION` the data.
+- To scale easier on these kinds of scenarios, it is suggested to have `partition_key`.
+- Best practices to choose a `partition_key`:
+  - Understand the ratio of reads and writes: 
+    - if your application is reading more than writing to the database, `optimize for frequency`.
+    - if your application is writing more than reading from the database, `load balance`.
+  - Example of a bad partition key: 
+    - Suppose you have an IoT system, You would get 10000 requests coming in to your database at the same time.
+        - If you choose `creation_timestamp` as the partition key, then you would end up getting write bottlenecks, as you will write to the same node and as the timestamp would be very similar and won't make sense.
+        - If you choose `device_id` as the partition key, the database will know exactly where to put the data to which node. So reads and writes will be easier.
+  - Look for the dataset and try to find the most common field (it shouldn't be unique id or non changing field)
+    - In the example of IoT, check `where` clause of most run queries, and you would see the `device_id` show up, then it would be a good partition key for your usecase.
+## Cosmosdb integration with spring boot
+- ⚠️ To be honest, I wasn't able to see the data on Data explorer. However, I was able to see the data when I ran postman collection locally.
+- ⚠️ This project assumes you have created a resource group.
+- ⚠️ This project assumes you have created a cosmosdb `table` database.
+  - Go to your resource group and select `Create`
+  - In marketplace search for `cosmos db table` and create the database with any given account name.
+  - Once you create entities using postman, the database will be created automatically.
+- ⚠️ You're expected to provide the following properties in your application.properties file.
+```properties
+spring.cloud.azure.cosmos.endpoint=https://contosoaccounttest.documents.azure.com:443/
+spring.cloud.azure.cosmos.key=your-cosmosdb-primary-key
+spring.cloud.azure.cosmos.database=contosoaccounttest
+```
+- Activate the cosmosdb repositories with : `@EnableCosmosRepositories`
+- Create a repository with `CosmosRepository` (see also `CosmosReactiveRepository` for reactive operations).
+
+## Where to get connection properties?
+- Go to DB Account > Settings > Connection Strings
+- Note down endpoint , key (primary key) and the name of the database that you have created. And replace the values of the properties above.
+  ![Upload file using postman](./src/main/resources/static/connection-props.png)
+
+
+## Interacting with azure cloud database
+- Please find the sample date under [resources](/src/main/resources/static/sample-data.json)
+- There are 4 endpoints in place for you test,
+- `create customer`: to create a customer
+- `get customer`: to get the created customer
+- `get all customers`: to get all customers
+- `get all customers by country`: to filter customers by country
+
+
+
+## Refs
+- https://www.youtube.com/watch?v=QLgK8yhKd5U&list=PLmamF3YkHLoLLGUtSoxmUkORcWaTyHlXp
+
+
+### Disclaimer Text
+The sample data provided in this repository, including but not limited to names, addresses, phone numbers, and email addresses, are entirely fictional. Any resemblance to real persons, living or dead, actual addresses, phone numbers, or email addresses is purely coincidental.
+
+I do not bear any responsibility for any coincidental matches to real-world data and am not responsible for any related data issues. This data is meant solely for testing and demonstration purposes.

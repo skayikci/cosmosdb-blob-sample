@@ -27,6 +27,7 @@ out/
 !**/src/test/**/out/
 data/
 /src/main/resources/application.properties
+/src/main/resources/application.yaml
 
 ### NetBeans ###
 /nbproject/private/

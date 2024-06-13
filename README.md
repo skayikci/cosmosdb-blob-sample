@@ -217,12 +217,54 @@ spring.cloud.azure.cosmos.database=contosoaccounttest
 - `get customer`: to get the created customer
 - `get all customers`: to get all customers
 - `get all customers by country`: to filter customers by country
-
+```properties
+spring.cloud.azure.cosmos.endpoint=https://contosoaccounttest.documents.azure.com:443/
+spring.cloud.azure.cosmos.key=your-cosmosdb-primary-key
+spring.cloud.azure.cosmos.database=contosoaccounttest
+```
 
 
 ## Refs
 - https://www.youtube.com/watch?v=QLgK8yhKd5U&list=PLmamF3YkHLoLLGUtSoxmUkORcWaTyHlXp
 
+## Update 13.06.2024
+## App config summary
+- The app config service is there to keep your credential information, connection strings, and anything related to your service.
+- Once you set it up, you can also use the credentials from key-vault service or move already existing credentials from your app config service to key vault, to add extra level of security and encryption.
+- More importantly, you can use it to store your feature flags!
+- To create the service, simply reuse the resource group you created and select mostly the default settings:
+  ![App Config creation](./src/main/resources/static/create-appconfig.png)
+
+## Alternative ways to add your keys to App Configuration service
+### 1. Operations / Import
+- ⚠️ Imports with yaml files are not very convenient (aka. NOT WORKING!) ⚠️
+- Simply go to Operations > Import > Source: Configuration file
+- Select the configuration file to be uploaded (json or properties)
+- Select the language (in our case spring)
+- Select the prefix, in our case we need /application
+
+
+### 2. Creating keys manually
+- Go to Operations > Configuration Explorer
+- After that you can create key values using the following format:
+```properties
+/application/spring.cloud.azure.cosmos.endpoint
+/application/spring.cloud.azure.cosmos.key
+/application/spring.cloud.azure.cosmos.database
+```
+(you can also add other properties like this too.)
+
+## Building & Running the application locally
+- You will need to add following dependency:
+```properties
+implementation("com.azure.spring:spring-cloud-azure-starter-appconfiguration-config")
+```
+- ⚠️ You will need to rename your application.properties file to **bootstrap.properties** (because azure properties really doesn't like application.yaml or application.property files!) ⚠️
+- Get the connection properties under Settings > Connection string - you can use read/write or read only keys.
+- et voila! you will be using your application without any extra property defined in your local environment, AND it is FREE 🤩 !
+
+## Refs
+- https://learn.microsoft.com/en-us/samples/azure-samples/azure-spring-boot-samples/managing-features-and-get-configurations-from-app-configuration-in-spring-boot-application/
 
 ### Disclaimer Text
 The sample data provided in this repository, including but not limited to names, addresses, phone numbers, and email addresses, are entirely fictional. Any resemblance to real persons, living or dead, actual addresses, phone numbers, or email addresses is purely coincidental.

@@ -40,7 +40,7 @@ public class CosmosdbOperationsController {
      * @return {@link CustomerCreateResponse} representing get operation result.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<CustomerGetResponse> getItem(@PathVariable @NotBlank String id) {
+    public ResponseEntity<CustomerGetResponse> getItem(@PathVariable String id) {
         return ResponseEntity.ok(cosmosdbOperationsService.getItem(id));
     }
 

@@ -267,6 +267,10 @@ implementation("com.azure.spring:spring-cloud-azure-starter-appconfiguration-con
 - https://learn.microsoft.com/en-us/samples/azure-samples/azure-spring-boot-samples/managing-features-and-get-configurations-from-app-configuration-in-spring-boot-application/
 
 ## Update 26.06.2024
+⚠️ This changes assume you have a maven project (i know, right?)
+⚠️ Because, for now only maven builds are accepted via github!
+Thankfully, gradle maven builder plugin will help us create a pom.xml which then can be used to create a running (hopefully) build for us! (see the code i added into build.gradle, then hit publish to publish your local pom.xml under build>publications>maven)
+
 ## Managed identities
 - User assigned 
 - System assigned

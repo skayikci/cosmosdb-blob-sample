@@ -266,6 +266,34 @@ implementation("com.azure.spring:spring-cloud-azure-starter-appconfiguration-con
 ## Refs
 - https://learn.microsoft.com/en-us/samples/azure-samples/azure-spring-boot-samples/managing-features-and-get-configurations-from-app-configuration-in-spring-boot-application/
 
+## Update 26.06.2024
+## Managed identities
+- User assigned 
+- System assigned
+
+For this, I will reuse the analogy that is used in describing this concept.
+
+Say that you have a car , and a garage. You need to park your car to this garage of yours. There are 3 ways to authorise yourself to this car park:
+1. Key
+2. Car mirror buttons (if any) (System assigned)
+3. Remote control (User assigned)
+
+So as you can see, it fits perfectly to explain this concept.
+I will use system assigned identity, and let Azure take care of the authentication of my application.
+
+### Steps to create system assigned authentication
+1. Create system assigned identity on azure (or via shell)
+   1. Go to your app > Settings > Identity
+   2. Status > On > Click on : Save
+2. Now save your object (principal) id somewhere.
+3. Grant access to your blob
+   1. Now switch to your blob (or create one with default settings)
+   2. Access Control (IAM)
+   3. Add > Add Role Assignment > Select `Storage Blob Data Contributor'
+   4. On the members section > Managed Idendity > +Select Members > Select the app that you have created (this one!, i mean select the app that you just created managed identity for)
+   5. You can verify by going to Access control > Role Assignments > At the bottom > Storage Blob Data Contributor
+4. Let's try with postman!
+
 ### Disclaimer Text
 The sample data provided in this repository, including but not limited to names, addresses, phone numbers, and email addresses, are entirely fictional. Any resemblance to real persons, living or dead, actual addresses, phone numbers, or email addresses is purely coincidental.
 

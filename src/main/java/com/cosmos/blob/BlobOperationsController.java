@@ -1,6 +1,7 @@
 package com.cosmos.blob;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +17,14 @@ import org.springframework.web.multipart.MultipartFile;
 public class BlobOperationsController {
 
     private final BlobOperationsService blobOperationsService;
+
+    /**
+     * Creates a blob container
+     */
+    @GetMapping("/")
+    public String showInstructions() {
+        return "You can call /container to create a container, or /file to upload a file at the blob";
+    }
 
     /**
      * Creates a blob container
